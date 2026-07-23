@@ -1,0 +1,8 @@
+streamlit==1.56.0
+feedparser==6.0.12
+beautifulsoup4==4.15.0
+langdetect==1.0.9
+deep-translator==1.11.4
+python-dotenv==1.2.2
+libsql==0.1.11
+requests==2.33.1
