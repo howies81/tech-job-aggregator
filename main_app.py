@@ -50,9 +50,9 @@ with tab_feed:
         # Setup connections to database and retrieve jobs from jobs table in database
         # according to entered keywords
         with db.getConnection() as conn:
-            raw_categories = [r['category'] for r in\
+            raw_categories = [r[0] for r in\
             conn.execute("SELECT DISTINCT category FROM jobs WHERE category IS NOT NULL").fetchall()]
-            raw_scopes = [r['location_scope'] for r in\
+            raw_scopes = [r[0] for r in\
             conn.execute\
             ("SELECT DISTINCT location_scope FROM jobs WHERE location_scope IS NOT NULL").fetchall()]
 
