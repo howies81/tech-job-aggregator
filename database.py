@@ -11,18 +11,29 @@ from dotenv import load_dotenv
 import streamlit as st
 import os
 
-# 1. Force retrieval directly from Streamlit secrets
-TURSO_URL = st.secrets.get("TURSO_URL")
-TURSO_TOKEN = st.secrets.get("TURSO_TOKEN")
+TURSO_URL = None
+TURSO_TOKEN = None
 
-# 2. Strict validation check
+# 1. Try to read from Streamlit Secrets first
+try:
+    if st.secrets:
+        TURSO_URL = st.secrets.get("TURSO_URL")
+        TURSO_TOKEN = st.secrets.get("TURSO_TOKEN")
+except Exception:
+    # This runs if we are outside of Streamlit (e.g., in GitHub Actions)
+    pass
+
+# 2. Fall back to GitHub Actions Environment Variables if Streamlit variables are missing
 if not TURSO_URL or not TURSO_TOKEN:
-    st.error("🚨 Streamlit Secrets are completely unreadable or missing!")
-    st.write("Current secrets keys available:", list(st.secrets.keys()))
-    raise ValueError("Missing critical Turso DB Connection environment strings.")
+    TURSO_URL = os.getenv("TURSO_URL")
+    TURSO_TOKEN = os.getenv("TURSO_TOKEN")
 
-
-
+# 3. Crash explicitly if both environments failed to provide credentials
+if not TURSO_URL or not TURSO_TOKEN:
+    raise ValueError(
+        "Missing Turso credentials! Ensure TURSO_URL and TURSO_TOKEN are "
+        "configured in Streamlit Secrets OR GitHub Repository Secrets."
+    )
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), 'schema.sql')
 
 
