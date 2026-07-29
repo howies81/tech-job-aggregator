@@ -1,12 +1,13 @@
 import os
 import libsql
+import streamlit as st
 from dotenv import load_dotenv
 
 #DB_PATH = os.path.join(os.path.dirname(__file__), 'job_aggregator.db')
 
 load_dotenv()
-TURSO_URL = os.getenv("TURSO_URL")
-TURSO_TOKEN = os.getenv("TURSO_TOKEN")
+TURSO_URL = os.getenv("TURSO_URL") or st.secrets.get("TURSO_URL")
+TURSO_TOKEN = os.getenv("TURSO_TOKEN") or st.secrets.get("TURSO_TOKEN")
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), 'schema.sql')
 
 
