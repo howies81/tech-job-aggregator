@@ -5,9 +5,24 @@ from dotenv import load_dotenv
 
 #DB_PATH = os.path.join(os.path.dirname(__file__), 'job_aggregator.db')
 
-load_dotenv()
-TURSO_URL = os.getenv("TURSO_URL") or st.secrets.get("TURSO_URL")
-TURSO_TOKEN = os.getenv("TURSO_TOKEN") or st.secrets.get("TURSO_TOKEN")
+# load_dotenv()
+# TURSO_URL = os.getenv("TURSO_URL") or st.secrets.get("TURSO_URL")
+# TURSO_TOKEN = os.getenv("TURSO_TOKEN") or st.secrets.get("TURSO_TOKEN")
+import streamlit as st
+import os
+
+# 1. Force retrieval directly from Streamlit secrets
+TURSO_URL = st.secrets.get("TURSO_URL")
+TURSO_TOKEN = st.secrets.get("TURSO_TOKEN")
+
+# 2. Strict validation check
+if not TURSO_URL or not TURSO_TOKEN:
+    st.error("🚨 Streamlit Secrets are completely unreadable or missing!")
+    st.write("Current secrets keys available:", list(st.secrets.keys()))
+    raise ValueError("Missing critical Turso DB Connection environment strings.")
+
+
+
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), 'schema.sql')
 
 
