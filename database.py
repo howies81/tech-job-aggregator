@@ -1,4 +1,5 @@
 import os
+import sqlite3
 import libsql
 import streamlit as st
 from dotenv import load_dotenv
@@ -182,11 +183,13 @@ def get_saved_jobs() -> list:
         """
 
         conn = getConnection()
+        #conn.row_factory = sqlite3.Row
         cursor = conn.execute(sql)
         rows = cursor.fetchall()
         columns = [d[0] for d in cursor.description]
         conn.close()
-        return rows
+        return [dict(zip(columns, row)) for row in rows]
+        #return rows
     
     except Exception as e:
         print(f"Unexpected DB error: {e}")
